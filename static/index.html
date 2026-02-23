@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantCare AI</title>
+    <!-- Use Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div id="app-container">
+        <!-- Auth View -->
+        <div id="auth-view" class="view active">
+            <div class="auth-card glass-panel">
+                <div class="auth-header">
+                    <img src="https://cdn-icons-png.flaticon.com/512/628/628283.png" alt="Leaf Logo" class="logo-icon">
+                    <h1>PlantCare AI</h1>
+                </div>
+                <div id="form-login" class="auth-step active">
+                    <p class="otp-instruction" style="margin-bottom: 12px;">Sign in to your account</p>
+                    <input type="email" id="login-email" placeholder="Email Address" class="input-field" required>
+                    <input type="password" id="login-password" placeholder="Password" class="input-field" required
+                        onkeypress="if(event.key === 'Enter') app.login()">
+                    <button class="text-btn" style="font-size: 13px; margin-top: -6px; align-self: flex-end;"
+                        onclick="app.toggleAuthForm('forgot-password')">Forgot password?</button>
+                    <button class="primary-btn" onclick="app.login()">Sign In</button>
+                    <button class="text-btn" onclick="app.toggleAuthForm('signup')">Need an account? Sign
+                        Up</button>
+                    <div id="login-error" class="error-msg"></div>
+                </div>
+
+                <div id="form-signup" class="auth-step">
+                    <p class="otp-instruction" style="margin-bottom: 12px;">Create a new account</p>
+                    <input type="email" id="signup-email" placeholder="Email Address" class="input-field" required>
+                    <input type="text" id="signup-username" placeholder="Unique Username" class="input-field" required>
+                    <input type="password" id="signup-password" placeholder="Password" class="input-field" required>
+                    <input type="password" id="signup-password-confirm" placeholder="Confirm Password"
+                        class="input-field" required onkeypress="if(event.key === 'Enter') app.signup()">
+                    <button class="primary-btn" onclick="app.signup()">Create Account</button>
+                    <button class="text-btn" onclick="app.toggleAuthForm('login')">Already have an account? Sign
+                        In</button>
+                    <div id="signup-error" class="error-msg"></div>
+                </div>
+
+                <div id="form-signup-otp" class="auth-step">
+                    <p class="otp-instruction" style="margin-bottom: 12px;">Check your email for the 6-digit
+                        verification code.</p>
+                    <input type="text" id="signup-otp-input" placeholder="123456" class="input-field" maxlength="6"
+                        onkeypress="if(event.key === 'Enter') app.verifySignupOTP()">
+                    <button class="primary-btn" onclick="app.verifySignupOTP()">Verify & Confirm</button>
+                    <button class="text-btn" onclick="app.toggleAuthForm('signup')">Back</button>
+                    <div id="signup-otp-error" class="error-msg"></div>
+                </div>
+
+                <div id="form-forgot-password" class="auth-step">
+                    <p class="otp-instruction" style="margin-bottom: 12px;">Reset your password</p>
+                    <input type="email" id="forgot-email" placeholder="Email Address" class="input-field" required
+                        onkeypress="if(event.key === 'Enter') app.forgotPassword()">
+                    <button class="primary-btn" onclick="app.forgotPassword()">Send Recovery Code</button>
+                    <button class="text-btn" onclick="app.toggleAuthForm('login')">Back to Login</button>
+                    <div id="forgot-error" class="error-msg"></div>
+                </div>
+
+                <div id="form-reset-password" class="auth-step">
+                    <p class="otp-instruction" style="margin-bottom: 12px;">Enter your recovery code and new password
+                    </p>
+                    <input type="text" id="reset-otp-input" placeholder="6-digit Code" class="input-field" maxlength="6"
+                        required>
+                    <input type="password" id="reset-new-password" placeholder="New Password" class="input-field"
+                        required onkeypress="if(event.key === 'Enter') app.resetPassword()">
+                    <button class="primary-btn" onclick="app.resetPassword()">Set New Password</button>
+                    <button class="text-btn" onclick="app.toggleAuthForm('login')">Cancel</button>
+                    <div id="reset-error" class="error-msg"></div>
+                </div>
+            </div>
+            <!-- Background Decoration -->
+            <div class="bg-shape shape-1"></div>
+            <div class="bg-shape shape-2"></div>
+        </div>
+
+        <!-- Main SPA Layout -->
+        <div id="main-view" class="view">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar glass-panel">
+                <div class="nav-brand">
+                    <img src="https://cdn-icons-png.flaticon.com/512/628/628283.png" alt="Leaf Logo" class="logo-icon">
+                    <h2>PlantCare</h2>
+                </div>
+                <ul class="nav-links">
+                    <li class="active" onclick="app.navigate('feed')">
+                        <i>📋</i> Feed
+                    </li>
+                    <li onclick="app.navigate('search')">
+                        <i>🔎</i> Search
+                    </li>
+                    <li onclick="app.navigate('predict')">
+                        <i>🔍</i> AI Diagnosis
+                    </li>
+                    <li onclick="app.navigate('chats')">
+                        <i>💬</i> Direct Messages
+                    </li>
+                    <li onclick="app.navigate('profile')">
+                        <i>👤</i> Profile
+                    </li>
+                    <li onclick="app.navigate('notifications')">
+                        <i>🔔</i> Notifications
+                    </li>
+                </ul>
+                <div class="nav-footer">
+                    <button class="text-btn" onclick="app.logout()">Log out</button>
+                </div>
+            </nav>
+
+            <!-- Main Content Area -->
+            <main class="content-area">
+                <!-- Feed Section -->
+                <section id="section-feed" class="content-section active">
+                    <div class="section-header">
+                        <h2>Community Feed</h2>
+                        <div class="feed-tabs">
+                            <button class="tab active" onclick="app.switchFeed('global')">Global</button>
+                            <button class="tab" onclick="app.switchFeed('following')">Following</button>
+                        </div>
+                    </div>
+
+                    <div class="compose-box glass-panel">
+                        <textarea id="post-content"
+                            placeholder="Share your agriculture thoughts or questions..."></textarea>
+                        <div class="compose-actions">
+                            <button class="primary-btn" onclick="app.createPost()">Post</button>
+                        </div>
+                    </div>
+
+                    <div id="feed-container" class="posts-list">
+                        <!-- Posts injected dynamically -->
+                    </div>
+                </section>
+
+                <!-- Search Section -->
+                <section id="section-search" class="content-section">
+                    <div class="section-header">
+                        <h2>Explore</h2>
+                        <div class="feed-tabs">
+                            <button class="tab search-tab active" onclick="app.switchSearch('users')">Users</button>
+                            <button class="tab search-tab" onclick="app.switchSearch('posts')">Posts</button>
+                        </div>
+                    </div>
+
+                    <div class="search-box glass-panel"
+                        style="padding: 20px; margin-bottom: 32px; display: flex; gap: 12px;">
+                        <input type="text" id="search-input" placeholder="Search for farmers or posts..."
+                            class="input-field" onkeypress="if(event.key === 'Enter') app.runSearch()">
+                        <button class="primary-btn" onclick="app.runSearch()"
+                            style="width: auto; padding: 0 24px;">Search</button>
+                    </div>
+
+                    <div id="search-results-container" class="posts-list">
+                        <p class="text-muted">Type something to search...</p>
+                    </div>
+                </section>
+
+                <!-- AI Prediction Section -->
+                <section id="section-predict" class="content-section">
+                    <div class="section-header">
+                        <h2>AI Disease Diagnosis</h2>
+                        <p>Upload a clear photo of the plant leaf for accurate analysis.</p>
+                    </div>
+
+                    <div class="upload-zone glass-panel">
+                        <input type="file" id="image-upload" accept="image/*" onchange="app.previewImage(event)">
+                        <label for="image-upload" class="upload-label">
+                            <i class="upload-icon">📷</i>
+                            <span>Click to browse or drag image here</span>
+                        </label>
+                        <img id="image-preview" class="hidden">
+                    </div>
+                    <button id="predict-btn" class="primary-btn generate-btn hidden" onclick="app.runPrediction()">Scan
+                        Plant</button>
+
+                    <div id="prediction-result" class="prediction-card glass-panel hidden">
+                        <!-- Result injected here -->
+                    </div>
+
+                    <div class="history-section mt-4">
+                        <h3>Your Scan History</h3>
+                        <div id="prediction-history" class="history-grid">
+                            <!-- History injected here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="section-profile" class="content-section">
+                    <div class="profile-header glass-panel">
+                        <div class="profile-info">
+                            <img src="https://ui-avatars.com/api/?name=User&background=random" id="profile-avatar"
+                                class="avatar-large">
+                            <div>
+                                <h2 id="profile-name">User</h2>
+                                <p id="profile-username"
+                                    style="color: var(--primary-color); font-weight: 500; font-size: 14px;">@user
+                                </p>
+                                <p id="profile-bio">Passionate farmer</p>
+                                <div class="stats">
+                                    <span><strong id="followers-count">0</strong> Followers</span>
+                                    <span><strong id="following-count">0</strong> Following</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="primary-btn" onclick="app.openProfileEditor()"
+                            style="margin-top: 16px; width: auto; padding: 8px 16px; font-size: 14px; background: white; color: var(--text-color); border: 1px solid var(--border-color);">
+                            Edit Profile
+                        </button>
+                    </div>
+
+                    <!-- Hidden Edit Profile Overlay -->
+                    <div id="profile-edit-modal" class="view"
+                        style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center;">
+                        <div class="glass-panel"
+                            style="background: white; width: 400px; padding: 32px; border-radius: 12px; display: flex; flex-direction: column; gap: 16px;">
+                            <h2 style="font-size: 20px; color: var(--primary-color);">Edit Profile</h2>
+
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                                <img src="" id="edit-profile-avatar-preview"
+                                    style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color);">
+                                <label for="edit-profile-avatar-input" class="text-btn"
+                                    style="color: var(--primary-color); cursor: pointer; font-size: 14px;">Change
+                                    Picture</label>
+                                <input type="file" id="edit-profile-avatar-input" accept="image/*"
+                                    style="display: none;" onchange="app.handleAvatarSelect(this)">
+                            </div>
+
+                            <div>
+                                <label
+                                    style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; display: block;">Username</label>
+                                <input type="text" id="edit-profile-username" class="input-field" disabled
+                                    style="background-color: var(--bg-color); color: var(--text-muted); cursor: not-allowed;">
+                            </div>
+
+                            <div>
+                                <label
+                                    style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; display: block;">Name</label>
+                                <input type="text" id="edit-profile-name" class="input-field" placeholder="Your Name">
+                            </div>
+
+                            <div>
+                                <label
+                                    style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; display: block;">Bio</label>
+                                <textarea id="edit-profile-bio" class="input-field" style="resize: none; height: 80px;"
+                                    placeholder="Tell us about your farm..."></textarea>
+                            </div>
+
+                            <div style="display: flex; gap: 12px; margin-top: 12px;">
+                                <button class="primary-btn" onclick="app.saveProfileEdits()" style="flex: 1;">Save
+                                    Changes</button>
+                                <button class="primary-btn" onclick="app.closeProfileEditor()"
+                                    style="flex: 1; background: #f1f5f9; color: var(--text-color);">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-tabs mt-4">
+                        <h3>My Recent Posts</h3>
+                        <div id="profile-posts" class="posts-list mt-2">
+                            <!-- Posts -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Public User Profile Section -->
+                <section id="section-user-profile" class="content-section">
+                    <div class="profile-header glass-panel">
+                        <div class="profile-info">
+                            <img src="https://ui-avatars.com/api/?name=User&background=random"
+                                id="public-profile-avatar" class="avatar-large">
+                            <div>
+                                <h2 id="public-profile-name">User</h2>
+                                <p id="public-profile-username"
+                                    style="color: var(--primary-color); font-weight: 500; font-size: 14px;">@user
+                                </p>
+                                <p id="public-profile-bio">Passionate farmer</p>
+                                <div class="stats">
+                                    <span><strong id="public-followers-count">0</strong> Followers</span>
+                                    <span><strong id="public-following-count">0</strong> Following</span>
+                                </div>
+                                <div style="margin-top: 16px; display: flex; gap: 12px;">
+                                    <button class="primary-btn" id="btn-public-follow"
+                                        style="width: auto; padding: 6px 16px;">Follow</button>
+                                    <button class="primary-btn" id="btn-public-message"
+                                        style="width: auto; padding: 6px 16px; background: var(--bg-color); color: var(--text-color); border: 1px solid var(--border-color);">Message</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Chat & Direct Messages Section -->
+                <section id="section-chats" class="content-section">
+                    <div class="section-header">
+                        <h2>Direct Messages</h2>
+                    </div>
+                    <!-- Two pane layout for chat -->
+                    <div style="display: flex; gap: 20px; height: 65vh;">
+                        <div class="glass-panel" style="flex: 1; overflow-y: auto; padding: 12px;">
+                            <h3>Recent Conversations</h3>
+                            <div id="recent-chats-list"
+                                style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+                                <!-- User list injected here -->
+                            </div>
+                        </div>
+                        <div class="glass-panel" style="flex: 2; display: flex; flex-direction: column;">
+                            <div id="chat-active-header"
+                                style="padding: 16px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px;">
+                                <img src="" id="chat-active-avatar" class="avatar hidden">
+                                <h3 id="chat-active-name" style="margin: 0;">Select a conversation</h3>
+                            </div>
+                            <div id="chat-messages-container"
+                                style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                                <!-- Messages injected here -->
+                            </div>
+                            <div
+                                style="padding: 16px; border-top: 1px solid var(--border-color); display: flex; gap: 8px;">
+                                <input type="text" id="chat-input-msg" class="input-field"
+                                    placeholder="Type a message..." style="margin-bottom: 0;" disabled
+                                    onkeypress="if(event.key === 'Enter') app.sendChatMessage()">
+                                <button class="primary-btn" id="chat-send-btn" style="width: auto; padding: 0 20px;"
+                                    disabled onclick="app.sendChatMessage()">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notifications Section -->
+                <section id="section-notifications" class="content-section">
+                    <div class="section-header">
+                        <h2>Notifications</h2>
+                        <button class="text-btn" onclick="app.markAllRead()">Mark all as read</button>
+                    </div>
+                    <div id="notifications-list" class="notifications-list">
+                        <!-- Notifications injected here -->
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/static/app.js?v=2"></script>
+</body>
+
+</html>
