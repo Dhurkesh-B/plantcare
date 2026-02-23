@@ -729,8 +729,10 @@ const app = {
     },
 
     async saveProfileEdits() {
-        const name = document.getElementById('edit-profile-name').value.trim();
-        const bio = document.getElementById('edit-profile-bio').value.trim();
+        const nameEl = document.getElementById('edit-profile-name');
+        const bioEl = document.getElementById('edit-profile-bio');
+        const name = nameEl ? nameEl.value.trim() : '';
+        const bio = bioEl ? bioEl.value.trim() : '';
         const profile_image = this.state.pendingAvatarBase64;
 
         const payload = {};
@@ -740,19 +742,33 @@ const app = {
 
         try {
             document.body.classList.add('loading');
+
+            // 1. Send the Database update request
             const res = await axios.put(`${API_BASE}/users/me`, payload);
 
-            // Update local state
-            this.state.currentUser = res.data;
+            // 2. We received HTTP 200 OK. The DB updated successfully!
+            if (res && res.data) {
+                this.state.currentUser = res.data;
+            }
 
-            // Refresh Profile View
-            this.navigate('profile');
-            this.closeProfileEditor();
+            alert('Profile updated successfully!');
+
+            // 3. Perform unstable DOM refreshes safely
+            try {
+                if (typeof this.navigate === 'function') this.navigate('profile');
+                if (typeof this.closeProfileEditor === 'function') this.closeProfileEditor();
+            } catch (domErr) {
+                console.warn('Silenced DOM layout error during profile refresh:', domErr);
+            }
 
         } catch (e) {
-            alert(e.response?.data?.detail || 'Failed to update profile');
+            console.error("SaveProfileEdits Error:", e);
+            const msg = (e.response && e.response.data && e.response.data.detail) ? e.response.data.detail : (e.message || 'Failed to update profile');
+            alert('Update Failed: ' + msg);
         } finally {
             document.body.classList.remove('loading');
+            const modal = document.getElementById('profile-edit-modal');
+            if (modal) modal.classList.remove('active');
         }
     },
 
