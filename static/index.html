@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/png" href="/static/favicon.png">
 </head>
 
 <body>
@@ -221,10 +222,16 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="primary-btn" onclick="app.openProfileEditor()"
-                            style="margin-top: 16px; width: auto; padding: 8px 16px; font-size: 14px; background: white; color: var(--text-color); border: 1px solid var(--border-color);">
-                            Edit Profile
-                        </button>
+                        <div style="margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap;">
+                            <button class="primary-btn" onclick="app.openProfileEditor()"
+                                style="width: auto; padding: 8px 16px; font-size: 14px; background: white; color: var(--text-color); border: 1px solid var(--border-color);">
+                                Edit Profile
+                            </button>
+                            <button class="primary-btn" onclick="app.logout()"
+                                style="width: auto; padding: 8px 16px; font-size: 14px; background: white; color: var(--error-color); border: 1px solid var(--border-color);">
+                                Log Out
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Hidden Edit Profile Overlay -->
