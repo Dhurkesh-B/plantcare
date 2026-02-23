@@ -85,30 +85,39 @@
 
         <!-- Main SPA Layout -->
         <div id="main-view" class="view">
+            <!-- Mobile Top Nav -->
+            <div class="mobile-top-nav">
+                <h2 style="font-weight: 700; font-size: 20px; color: var(--primary-color);">PlantCare</h2>
+            </div>
             <!-- Sidebar Navigation -->
-            <nav class="sidebar glass-panel">
+            <nav class="sidebar">
                 <div class="nav-brand">
                     <img src="https://cdn-icons-png.flaticon.com/512/628/628283.png" alt="Leaf Logo" class="logo-icon">
                     <h2>PlantCare</h2>
                 </div>
                 <ul class="nav-links">
                     <li class="active" onclick="app.navigate('feed')">
-                        <i>📋</i> Feed
+                        <img src="/static/feed.png" class="nav-icon" alt="Feed"> <span class="nav-text">Feed</span>
                     </li>
                     <li onclick="app.navigate('search')">
-                        <i>🔎</i> Search
+                        <img src="/static/search.png" class="nav-icon" alt="Search"> <span
+                            class="nav-text">Search</span>
                     </li>
                     <li onclick="app.navigate('predict')">
-                        <i>🔍</i> AI Diagnosis
+                        <img src="/static/data-analytics.png" class="nav-icon" alt="AI Diagnosis"> <span
+                            class="nav-text">AI Diagnosis</span>
                     </li>
                     <li onclick="app.navigate('chats')">
-                        <i>💬</i> Direct Messages
+                        <img src="/static/chat.png" class="nav-icon" alt="Messages"> <span
+                            class="nav-text">Messages</span>
                     </li>
                     <li onclick="app.navigate('profile')">
-                        <i>👤</i> Profile
+                        <img src="/static/profile.png" class="nav-icon" alt="Profile"> <span
+                            class="nav-text">Profile</span>
                     </li>
                     <li onclick="app.navigate('notifications')">
-                        <i>🔔</i> Notifications
+                        <img src="/static/notification.png" class="nav-icon" alt="Notifications"> <span
+                            class="nav-text">Notifications</span>
                     </li>
                 </ul>
                 <div class="nav-footer">
@@ -305,15 +314,15 @@
                         <h2>Direct Messages</h2>
                     </div>
                     <!-- Two pane layout for chat -->
-                    <div style="display: flex; gap: 20px; height: 65vh;">
-                        <div class="glass-panel" style="flex: 1; overflow-y: auto; padding: 12px;">
+                    <div class="chat-container">
+                        <div class="glass-panel chat-sidebar">
                             <h3>Recent Conversations</h3>
                             <div id="recent-chats-list"
                                 style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
                                 <!-- User list injected here -->
                             </div>
                         </div>
-                        <div class="glass-panel" style="flex: 2; display: flex; flex-direction: column;">
+                        <div class="glass-panel chat-main-panel">
                             <div id="chat-active-header"
                                 style="padding: 16px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px;">
                                 <img src="" id="chat-active-avatar" class="avatar hidden">

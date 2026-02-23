@@ -1,14 +1,10 @@
 :root {
     --primary-color: #10b981;
-    /* Emerald Green */
     --primary-hover: #059669;
     --bg-color: #f8fafc;
-    /* Slate 50 */
-    --surface-color: rgba(255, 255, 255, 0.85);
+    --surface-color: #ffffff;
     --text-color: #0f172a;
-    /* Slate 900 */
     --text-muted: #64748b;
-    /* Slate 500 */
     --border-color: rgba(0, 0, 0, 0.08);
     --error-color: #ef4444;
 }
@@ -27,14 +23,12 @@ body {
     overflow-x: hidden;
 }
 
-/* Glassmorphism setup */
+/* Panel Configuration */
 .glass-panel {
     background: var(--surface-color);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border-radius: 12px;
 }
 
 /* UI Structure */
@@ -181,6 +175,10 @@ body {
     background: #f1f5f9;
 }
 
+.mobile-top-nav {
+    display: none;
+}
+
 .sidebar {
     width: 260px;
     height: 100%;
@@ -238,9 +236,10 @@ body {
     color: white;
 }
 
-.nav-links li i {
-    font-style: normal;
-    font-size: 18px;
+.nav-links li .nav-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
 }
 
 .content-area {
@@ -578,4 +577,177 @@ input[type="file"] {
     padding: 8px 16px;
     border-radius: 20px;
     font-size: 14px;
+}
+
+/* Chat Layout Classes */
+.chat-container {
+    display: flex;
+    gap: 20px;
+    height: 65vh;
+}
+
+.chat-sidebar {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.chat-main-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+/* -------------------------------------
+   Responsive Mobile Styling
+   ------------------------------------- */
+@media (max-width: 768px) {
+
+    /* Auth view adjustments */
+    .auth-card {
+        padding: 24px;
+        max-width: 90%;
+    }
+
+    .shape-1,
+    .shape-2 {
+        display: none;
+    }
+
+    /* Change Main View from flex-row to column on mobile */
+    #main-view.active {
+        flex-direction: column;
+    }
+
+    /* Transform Sidebar to Bottom Navigation */
+    .mobile-top-nav {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: var(--surface-color);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: 60px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0;
+        border-right: none;
+        border-top: 1px solid var(--border-color);
+        z-index: 1000;
+        border-radius: 0;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-brand,
+    .nav-footer {
+        display: none;
+        /* Hide brand name and logout on bottom nav */
+    }
+
+    .nav-links {
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        gap: 0;
+        justify-content: space-between;
+    }
+
+    .nav-links li {
+        flex: 1;
+        justify-content: center;
+        padding: 0;
+        border-radius: 0;
+        height: 100%;
+    }
+
+    .nav-links li:hover {
+        background: transparent;
+    }
+
+    .nav-links li.active {
+        background: transparent;
+        color: var(--primary-color);
+        border-top: 2px solid var(--primary-color);
+    }
+
+    /* Target the span text in nav-links and hide it */
+    .nav-text {
+        display: none;
+    }
+
+    .nav-links li .nav-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    /* Content Area Needs to span full width and shrink from bottom to clear nav */
+    .content-area {
+        width: 100%;
+        padding: 80px 16px 80px 16px;
+        /* 80px clears both 60px nav bars */
+        margin: 0;
+    }
+
+    /* Fit Post Cards neatly to mobile borders */
+    .post-card {
+        padding: 16px;
+        border-radius: 8px;
+    }
+
+    /* Profile Adjustments */
+    .profile-header {
+        padding: 20px;
+    }
+
+    .profile-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .avatar-large {
+        width: 80px;
+        height: 80px;
+    }
+
+    /* Chat layout Adjustments */
+    .chat-container {
+        height: calc(100vh - 200px);
+        flex-direction: column;
+    }
+
+    .chat-sidebar {
+        flex: none;
+        height: 150px;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 12px;
+    }
+
+    .chat-main-panel {
+        flex: 1;
+    }
+
+    /* AI Predict Adjustments */
+    .upload-zone {
+        padding: 24px;
+    }
+
+    .history-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
