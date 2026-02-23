@@ -726,20 +726,29 @@ input[type="file"] {
     }
 
     /* Chat layout Adjustments */
+    #section-chats.content-section {
+        padding: 0;
+    }
+
     .chat-container {
         height: calc(100vh - 200px);
+        /* Adjust to viewport minus headers */
         flex-direction: column;
+        border: none;
+        border-radius: 0;
     }
 
     .chat-sidebar {
         flex: none;
-        height: 150px;
+        height: 120px;
         border-bottom: 1px solid var(--border-color);
-        margin-bottom: 12px;
+        margin-bottom: 0;
     }
 
     .chat-main-panel {
         flex: 1;
+        border-radius: 0;
+        border: none;
     }
 
     /* AI Predict Adjustments */
