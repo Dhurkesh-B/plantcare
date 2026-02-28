@@ -1,13 +1,8 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
-class UserSignup(BaseModel):
-    email: EmailStr
-    username: str
-    password: str
-
-class OTPVerifySignup(BaseModel):
-    email: EmailStr
-    otp_code: str
+class GoogleAuthRequest(BaseModel):
+    credential: str
 
 class UserLogin(BaseModel):
     email: EmailStr
@@ -18,12 +13,4 @@ class Token(BaseModel):
     token_type: str = "bearer"
 
 class TokenData(BaseModel):
-    email: str | None = None
-
-class ForgotPasswordOTPRequest(BaseModel):
-    email: EmailStr
-
-class ResetPasswordRequest(BaseModel):
-    email: EmailStr
-    otp_code: str
-    new_password: str
+    email: Optional[str] = None

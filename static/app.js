@@ -63,14 +63,12 @@ const app = {
         }
     },
 
-    async login() {
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value;
-        if (!email || !password) return this.showError('login-error', 'Email and Password are required');
-
+    async handleGoogleCredentialResponse(response) {
         try {
             document.body.classList.add('loading');
-            const res = await axios.post(`${API_BASE}/auth/login`, { email, password });
+            const res = await axios.post(`${API_BASE}/auth/google`, {
+                credential: response.credential
+            });
 
             localStorage.setItem('access_token', res.data.access_token);
             this.showError('login-error', '');
@@ -78,102 +76,7 @@ const app = {
             this.fetchCurrentUser();
             this.navigate('feed');
         } catch (e) {
-            this.showError('login-error', e.response?.data?.detail || 'Login failed');
-        } finally {
-            document.body.classList.remove('loading');
-        }
-    },
-
-    async signup() {
-        const email = document.getElementById('signup-email').value.trim();
-        const username = document.getElementById('signup-username').value.trim();
-        const password = document.getElementById('signup-password').value;
-        const confirm_password = document.getElementById('signup-password-confirm').value;
-
-        if (!email || !username || !password) return this.showError('signup-error', 'All fields are required');
-        if (password !== confirm_password) return this.showError('signup-error', 'Passwords do not match');
-
-        try {
-            document.body.classList.add('loading');
-            const res = await axios.post(`${API_BASE}/auth/signup`, {
-                email,
-                username,
-                password
-            });
-
-            // Advance to the OTP step
-            this.state.email = email;
-            this.showError('signup-error', '');
-            this.toggleAuthForm('signup-otp');
-        } catch (e) {
-            this.showError('signup-error', e.response?.data?.detail || 'Sign up failed');
-        } finally {
-            document.body.classList.remove('loading');
-        }
-    },
-
-    async verifySignupOTP() {
-        const otp_code = document.getElementById('signup-otp-input').value.trim();
-        if (!otp_code) return this.showError('signup-otp-error', 'Verification code is required');
-
-        try {
-            document.body.classList.add('loading');
-            const res = await axios.post(`${API_BASE}/auth/verify-signup`, {
-                email: this.state.email,
-                otp_code
-            });
-
-            localStorage.setItem('access_token', res.data.access_token);
-            this.showError('signup-otp-error', '');
-            this.showMainView();
-            this.fetchCurrentUser();
-            this.navigate('feed');
-        } catch (e) {
-            this.showError('signup-otp-error', e.response?.data?.detail || 'Invalid verification code');
-        } finally {
-            document.body.classList.remove('loading');
-        }
-    },
-
-    async logout() {
-        localStorage.removeItem('access_token');
-        this.state.currentUser = null;
-        this.showAuthView();
-    },
-
-    async forgotPassword() {
-        const email = document.getElementById('forgot-email').value.trim();
-        if (!email) return this.showError('forgot-error', 'Email is required');
-
-        try {
-            document.body.classList.add('loading');
-            await axios.post(`${API_BASE}/auth/forgot-password`, { email });
-            this.state.email = email;
-            this.toggleAuthForm('reset-password');
-        } catch (e) {
-            this.showError('forgot-error', e.response?.data?.detail || 'Failed to send recovery code');
-        } finally {
-            document.body.classList.remove('loading');
-        }
-    },
-
-    async resetPassword() {
-        const otp_code = document.getElementById('reset-otp-input').value.trim();
-        const new_password = document.getElementById('reset-new-password').value;
-
-        if (!otp_code || !new_password) return this.showError('reset-error', 'All fields are required');
-
-        try {
-            document.body.classList.add('loading');
-            await axios.post(`${API_BASE}/auth/reset-password`, {
-                email: this.state.email,
-                otp_code,
-                new_password
-            });
-            this.toggleAuthForm('login');
-            this.showError('login-error', 'Password reset successful. Please log in.');
-        } catch (e) {
-            this.showError('reset-error', e.response?.data?.detail || 'Invalid code or failed to reset');
+            this.showError('login-error', e.response?.data?.detail || 'Google Sign-In failed');
         } finally {
             document.body.classList.remove('loading');
         }
@@ -797,3 +700,6 @@ const app = {
 document.addEventListener('DOMContentLoaded', () => {
     app.init();
 });
+
+// Expose Google Callback globally
+window.handleGoogleCredentialResponse = (response) => app.handleGoogleCredentialResponse(response);

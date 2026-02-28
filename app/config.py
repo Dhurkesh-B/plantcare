@@ -11,12 +11,14 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str
     
-    # SMTP specifics
+    # SMTP Settings
     SMTP_SERVER: str = "smtp.gmail.com"
     SMTP_PORT: int = 587
     SMTP_USERNAME: str
     SMTP_PASSWORD: str
-    
+    # Google OAuth2 Settings
+    GOOGLE_CLIENT_ID: str
+
     # AI constraints
     MODEL_NAME: str = "gianlab/swin-tiny-patch4-window7-224-finetuned-plantdisease"
 

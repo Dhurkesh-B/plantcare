@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" type="image/png" href="/static/favicon.png">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
@@ -22,66 +23,25 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/628/628283.png" alt="Leaf Logo" class="logo-icon">
                     <h1>PlantCare AI</h1>
                 </div>
-                <div id="form-login" class="auth-step active">
-                    <p class="otp-instruction" style="margin-bottom: 12px;">Sign in to your account</p>
-                    <input type="email" id="login-email" placeholder="Email Address" class="input-field" required>
-                    <input type="password" id="login-password" placeholder="Password" class="input-field" required
-                        onkeypress="if(event.key === 'Enter') app.login()">
-                    <button class="text-btn" style="font-size: 13px; margin-top: -6px; align-self: flex-end;"
-                        onclick="app.toggleAuthForm('forgot-password')">Forgot password?</button>
-                    <button class="primary-btn" onclick="app.login()">Sign In</button>
-                    <button class="text-btn" onclick="app.toggleAuthForm('signup')">Need an account? Sign
-                        Up</button>
-                    <div id="login-error" class="error-msg"></div>
-                </div>
+                <div id="form-login" class="auth-step active" style="text-align: center;">
+                    <p class="otp-instruction" style="margin-bottom: 24px; color: var(--text-muted);">Sign in securely
+                        to start analyzing your crops and connecting with the farming community.</p>
 
-                <div id="form-signup" class="auth-step">
-                    <p class="otp-instruction" style="margin-bottom: 12px;">Create a new account</p>
-                    <input type="email" id="signup-email" placeholder="Email Address" class="input-field" required>
-                    <input type="text" id="signup-username" placeholder="Unique Username" class="input-field" required>
-                    <input type="password" id="signup-password" placeholder="Password" class="input-field" required>
-                    <input type="password" id="signup-password-confirm" placeholder="Confirm Password"
-                        class="input-field" required onkeypress="if(event.key === 'Enter') app.signup()">
-                    <button class="primary-btn" onclick="app.signup()">Create Account</button>
-                    <button class="text-btn" onclick="app.toggleAuthForm('login')">Already have an account? Sign
-                        In</button>
-                    <div id="signup-error" class="error-msg"></div>
-                </div>
+                    <!-- Google Identity Services Snippet -->
+                    <div id="g_id_onload"
+                        data-client_id="236126753613-2n43d2sn918fjel31phm0o4pkb8sooei.apps.googleusercontent.com"
+                        data-context="signin" data-ux_mode="popup" data-callback="handleGoogleCredentialResponse"
+                        data-auto_prompt="false">
+                    </div>
 
-                <div id="form-signup-otp" class="auth-step">
-                    <p class="otp-instruction" style="margin-bottom: 12px;">Check your email for the 6-digit
-                        verification code.</p>
-                    <input type="text" id="signup-otp-input" placeholder="123456" class="input-field" maxlength="6"
-                        onkeypress="if(event.key === 'Enter') app.verifySignupOTP()">
-                    <button class="primary-btn" onclick="app.verifySignupOTP()">Verify & Confirm</button>
-                    <button class="text-btn" onclick="app.toggleAuthForm('signup')">Back</button>
-                    <div id="signup-otp-error" class="error-msg"></div>
-                </div>
+                    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
+                        data-text="signin_with" data-size="large" data-logo_alignment="left"
+                        style="display: flex; justify-content: center; margin-top: 16px;">
+                    </div>
 
-                <div id="form-forgot-password" class="auth-step">
-                    <p class="otp-instruction" style="margin-bottom: 12px;">Reset your password</p>
-                    <input type="email" id="forgot-email" placeholder="Email Address" class="input-field" required
-                        onkeypress="if(event.key === 'Enter') app.forgotPassword()">
-                    <button class="primary-btn" onclick="app.forgotPassword()">Send Recovery Code</button>
-                    <button class="text-btn" onclick="app.toggleAuthForm('login')">Back to Login</button>
-                    <div id="forgot-error" class="error-msg"></div>
-                </div>
-
-                <div id="form-reset-password" class="auth-step">
-                    <p class="otp-instruction" style="margin-bottom: 12px;">Enter your recovery code and new password
-                    </p>
-                    <input type="text" id="reset-otp-input" placeholder="6-digit Code" class="input-field" maxlength="6"
-                        required>
-                    <input type="password" id="reset-new-password" placeholder="New Password" class="input-field"
-                        required onkeypress="if(event.key === 'Enter') app.resetPassword()">
-                    <button class="primary-btn" onclick="app.resetPassword()">Set New Password</button>
-                    <button class="text-btn" onclick="app.toggleAuthForm('login')">Cancel</button>
-                    <div id="reset-error" class="error-msg"></div>
+                    <div id="login-error" class="error-msg" style="margin-top: 16px;"></div>
                 </div>
             </div>
-            <!-- Background Decoration -->
-            <div class="bg-shape shape-1"></div>
-            <div class="bg-shape shape-2"></div>
         </div>
 
         <!-- Main SPA Layout -->

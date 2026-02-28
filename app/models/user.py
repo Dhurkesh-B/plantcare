@@ -11,9 +11,9 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(String, primary_key=True, default=generate_uuid, index=True)
-    username = Column(String, unique=True, index=True, nullable=True)
     email = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
+    username = Column(String, unique=True, index=True, nullable=False)
+    hashed_password = Column(String, nullable=True)
     name = Column(String, nullable=True)
     bio = Column(String, nullable=True)
     profile_image = Column(String, nullable=True)
