@@ -82,6 +82,17 @@ const app = {
         }
     },
 
+    logout() {
+        localStorage.removeItem('access_token');
+        this.state.currentUser = null;
+        this.state.email = null;
+        this.state.activeChatUser = null;
+        this.showAuthView();
+
+        // Optional: Force a hard reload to clear any residual Google Identity state
+        window.location.reload();
+    },
+
 
 
     // --- Navigation ---
